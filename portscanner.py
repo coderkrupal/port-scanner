@@ -2,8 +2,35 @@
 
 import socket
 import time
+import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
+
+
+def clear():
+    os.system("cls" if os.name == "nt" else "clear")
+
+
+banner = r"""
+ ██████╗  ██████╗ ██████╗ ████████╗     ███████╗ ██████╗ █████╗ ███╗   ██╗
+ ██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝     ██╔════╝██╔════╝██╔══██╗████╗  ██║
+ ██████╔╝██║   ██║██████╔╝   ██║        ███████╗██║     ███████║██╔██╗ ██║
+ ██╔═══╝ ██║   ██║██╔══██╗   ██║        ╚════██║██║     ██╔══██║██║╚██╗██║
+ ██║     ╚██████╔╝██║  ██║   ██║        ███████║╚██████╗██║  ██║██║ ╚████║
+ ╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝        ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝
+
+               ⚡ Advanced Python Port Scanner ⚡
+         Author  : HackxKP
+         Version : 1.0
+         Mode    : Stealth | Fast | Accurate
+──────────────────────────────────────────────────────────────
+"""
+
+clear()
+for line in banner.split("\n"):
+    print(line)
+    time.sleep(0.03)
+
 
 # -----------------------------
 # Configuration
@@ -20,9 +47,11 @@ YELLOW = "\033[93m"
 CYAN = "\033[96m"
 RESET = "\033[0m"
 
+
 # -----------------------------
 # Utility Functions
 # -----------------------------
+
 
 def resolve_target(target):
     try:
@@ -31,15 +60,18 @@ def resolve_target(target):
         print("[!] Failed to resolve target")
         sys.exit(1)
 
+
 def get_service_name(port):
     try:
         return socket.getservbyport(port)
     except:
         return "unknown"
 
+
 # -----------------------------
 # Core Scan Function
 # -----------------------------
+
 
 def tcp_connect_scan(ip, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -60,9 +92,11 @@ def tcp_connect_scan(ip, port):
     sock.close()
     return port, result, elapsed, banner
 
+
 # -----------------------------
 # Confidence Engine
 # -----------------------------
+
 
 def calculate_confidence(result, response_time):
     confidence = 0
@@ -79,9 +113,11 @@ def calculate_confidence(result, response_time):
 
     return min(confidence, MAX_CONFIDENCE)
 
+
 # -----------------------------
 # Result Formatter
 # -----------------------------
+
 
 def interpret_result(port, result, response_time, banner):
     service = get_service_name(port)
@@ -101,9 +137,11 @@ def interpret_result(port, result, response_time, banner):
 
     return result == 0
 
+
 # -----------------------------
 # Scan Controller
 # -----------------------------
+
 
 def scan_target(target, start_port, end_port):
     ip = resolve_target(target)
@@ -137,9 +175,11 @@ def scan_target(target, start_port, end_port):
         print("[*] Ports:", ", ".join(map(str, open_ports)))
     print("-" * 40)
 
+
 # -----------------------------
 # Entry Point
 # -----------------------------
+
 
 def main():
     print("=== SentinelScan | Ethical Port Scanner ===")
@@ -150,6 +190,7 @@ def main():
     end_port = int(input("End port: "))
 
     scan_target(target, start_port, end_port)
+
 
 if __name__ == "__main__":
     main()
